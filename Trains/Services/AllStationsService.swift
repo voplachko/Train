@@ -16,9 +16,7 @@ protocol AllStationsServiceProtocol {
 }
 
 final class AllStationsService: AllStationsServiceProtocol {
-    /// Ответ /stations_list/ приходит с Content-Type: text/html,
-    /// поэтому тело собирается вручную и декодируется как JSON.
-    private static let responseSizeLimit = 50 * 1024 * 1024 // 50 MB
+    private static let responseSizeLimit = 50 * 1024 * 1024
 
     private let client: Client
     private let apikey: String
