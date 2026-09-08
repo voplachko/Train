@@ -24,9 +24,8 @@ func testAllServices() {
     Task {
         do {
             let client = try APIConfiguration.makeClient()
-            let apikey = APIConfiguration.apiKey
 
-            let nearestStationsService = NearestStationsService(client: client, apikey: apikey)
+            let nearestStationsService = NearestStationsService(client: client)
             let nearestStations = try await nearestStationsService.getNearestStations(
                 lat: TestInput.lat,
                 lng: TestInput.lng,
@@ -34,7 +33,7 @@ func testAllServices() {
             )
             print("✅ nearest_stations: найдено \(nearestStations.stations?.count ?? 0) станций")
 
-            let nearestCityService = NearestCityService(client: client, apikey: apikey)
+            let nearestCityService = NearestCityService(client: client)
             let nearestCity = try await nearestCityService.getNearestCity(
                 lat: TestInput.lat,
                 lng: TestInput.lng,
@@ -42,7 +41,7 @@ func testAllServices() {
             )
             print("✅ nearest_settlement: \(nearestCity.title ?? "—")")
 
-            let scheduleBetweenService = ScheduleBetweenStationsService(client: client, apikey: apikey)
+            let scheduleBetweenService = ScheduleBetweenStationsService(client: client)
             let segments = try await scheduleBetweenService.getScheduleBetweenStations(
                 from: TestInput.fromCode,
                 to: TestInput.toCode,
@@ -50,7 +49,7 @@ func testAllServices() {
             )
             print("✅ search: найдено \(segments.segments?.count ?? 0) рейсов")
 
-            let stationScheduleService = StationScheduleService(client: client, apikey: apikey)
+            let stationScheduleService = StationScheduleService(client: client)
             let stationSchedule = try await stationScheduleService.getStationSchedule(
                 station: TestInput.stationCode,
                 date: todayString()
@@ -58,7 +57,7 @@ func testAllServices() {
             print("✅ schedule: станция \(stationSchedule.station?.title ?? "—"), рейсов \(stationSchedule.schedule?.count ?? 0)")
 
             if let threadUID = segments.segments?.first?.thread?.uid {
-                let routeStationsService = RouteStationsService(client: client, apikey: apikey)
+                let routeStationsService = RouteStationsService(client: client)
                 let route = try await routeStationsService.getRouteStations(uid: threadUID)
                 print("✅ thread: \(route.title ?? "—"), остановок \(route.stops?.count ?? 0)")
             } else {
@@ -66,7 +65,7 @@ func testAllServices() {
             }
 
             if let carrierCode = segments.segments?.first?.thread?.carrier?.code {
-                let carrierService = CarrierService(client: client, apikey: apikey)
+                let carrierService = CarrierService(client: client)
                 let carrier = try await carrierService.getCarrierInfo(code: String(carrierCode))
                 let carrierTitle = carrier.carrier?.title ?? carrier.carriers?.first?.title
                 print("✅ carrier: \(carrierTitle ?? "—")")
@@ -74,11 +73,11 @@ func testAllServices() {
                 print("⚠️ carrier: не удалось получить код перевозчика из результатов /search/")
             }
 
-            let copyrightService = CopyrightService(client: client, apikey: apikey)
+            let copyrightService = CopyrightService(client: client)
             let copyright = try await copyrightService.getCopyright()
             print("✅ copyright: \(copyright.copyright?.text ?? "—")")
 
-            let allStationsService = AllStationsService(client: client, apikey: apikey)
+            let allStationsService = AllStationsService(client: client)
             let allStations = try await allStationsService.getAllStations()
             print("✅ stations_list: стран \(allStations.countries?.count ?? 0)")
 

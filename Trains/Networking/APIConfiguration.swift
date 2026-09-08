@@ -15,7 +15,8 @@ enum APIConfiguration {
     static func makeClient() throws -> Client {
         Client(
             serverURL: try Servers.Server1.url(),
-            transport: URLSessionTransport()
+            transport: URLSessionTransport(),
+            middlewares: [AuthMiddleware(apikey: apiKey)]
         )
     }
 }
