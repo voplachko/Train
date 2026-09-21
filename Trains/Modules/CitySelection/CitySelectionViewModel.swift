@@ -9,17 +9,22 @@ import SwiftUI
 
 @Observable
 final class CitySelectionViewModel {
+    // MARK: - Properties
+
     var query = ""
 
     private let allCities: [City]
+
+    // MARK: - Init
 
     init(repository: CityRepository = MockCityRepository()) {
         allCities = repository.cities()
     }
 
+    // MARK: - Output
+
     var cities: [City] {
-        guard !query.isEmpty else { return allCities }
-        return allCities.filter { $0.name.localizedCaseInsensitiveContains(query) }
+        allCities.filtered(byName: query)
     }
 
     var isEmpty: Bool {

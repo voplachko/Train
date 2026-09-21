@@ -8,7 +8,6 @@
 import SwiftUI
 
 extension Font {
-
     // MARK: - Regular
 
     static let regular12 = Font.system(size: 12, weight: .regular)
@@ -21,6 +20,8 @@ extension Font {
     static let bold24 = Font.system(size: 24, weight: .bold)
     static let bold34 = Font.system(size: 34, weight: .bold)
 }
+
+// MARK: - Preview
 
 #Preview {
     VStack(alignment: .leading, spacing: Dimen.x4) {

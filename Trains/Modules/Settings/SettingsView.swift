@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct SettingsView: View {
+    // MARK: - Properties
+
     @Environment(ErrorState.self) private var errorState
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: Dimen.x6) {
-            Text("Настройки")
+            Text(Strings.Settings.title)
                 .font(.bold24)
                 .foregroundStyle(Color.appBlack)
 
@@ -24,22 +28,26 @@ struct SettingsView: View {
         .background(Color.appWhite)
     }
 
+    // MARK: - Debug
+
     #if DEBUG
     private var debugErrorControls: some View {
         VStack(spacing: Dimen.x3) {
-            Button("Показать «Ошибка сервера»") {
+            Button(Strings.Debug.showServerError) {
                 errorState.show(.server)
             }
-            Button("Показать «Нет интернета»") {
+            Button(Strings.Debug.showNoInternet) {
                 errorState.show(.noInternet)
             }
-            Button("Убрать ошибку", action: errorState.clear)
+            Button(Strings.Debug.clearError, action: errorState.clear)
         }
         .font(.regular17)
         .tint(Color.appBlue)
     }
     #endif
 }
+
+// MARK: - Preview
 
 #Preview {
     SettingsView()

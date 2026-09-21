@@ -11,12 +11,14 @@ enum AppError: Identifiable, Hashable {
     case server
     case noInternet
 
+    // MARK: - Properties
+
     var id: Self { self }
 
     var title: String {
         switch self {
-        case .server: return "Ошибка сервера"
-        case .noInternet: return "Нет интернета"
+        case .server: return Strings.Errors.server
+        case .noInternet: return Strings.Errors.noInternet
         }
     }
 

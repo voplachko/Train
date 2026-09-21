@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct RouteSearchView: View {
+    // MARK: - Properties
+
     let viewModel: ScheduleFlowViewModel
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: Dimen.x4) {
@@ -23,8 +27,8 @@ struct RouteSearchView: View {
             )
 
             if viewModel.isRouteFilled {
-                PrimaryButton.short("Найти", action: viewModel.search)
-                    .transition(.opacity.combined(with: .scale(scale: 0.9)))
+                PrimaryButton.short(Strings.RouteSearch.search, action: viewModel.search)
+                    .transition(.opacity.combined(with: .scale(scale: AppStyle.appearScale)))
             }
 
             Spacer(minLength: 0)
@@ -33,10 +37,12 @@ struct RouteSearchView: View {
         .padding(.horizontal, Dimen.x4)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.appWhite)
-        .animation(.easeInOut(duration: 0.3), value: viewModel.isRouteFilled)
+        .animation(AppAnimation.standard, value: viewModel.isRouteFilled)
         .toolbar(.hidden, for: .navigationBar)
     }
 }
+
+// MARK: - Previews
 
 #Preview("Пустой") {
     NavigationStack {
@@ -47,10 +53,7 @@ struct RouteSearchView: View {
 #Preview("Заполненный") {
     NavigationStack {
         RouteSearchView(
-            viewModel: ScheduleFlowViewModel(
-                from: "Москва (Курский вокзал)",
-                to: "Санкт Петербург (Балтийский вокзал)"
-            )
+            viewModel: ScheduleFlowViewModel(from: MockData.route.from, to: MockData.route.to)
         )
     }
 }

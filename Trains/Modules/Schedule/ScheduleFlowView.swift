@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct ScheduleFlowView: View {
+    // MARK: - Properties
+
     @State private var viewModel: ScheduleFlowViewModel
+
+    // MARK: - Init
 
     init(viewModel: ScheduleFlowViewModel = ScheduleFlowViewModel()) {
         _viewModel = State(initialValue: viewModel)
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack(path: $viewModel.path) {
@@ -22,6 +28,8 @@ struct ScheduleFlowView: View {
                 }
         }
     }
+
+    // MARK: - Destinations
 
     @ViewBuilder
     private func destination(for route: ScheduleRoute) -> some View {
@@ -44,6 +52,8 @@ struct ScheduleFlowView: View {
         }
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     ScheduleFlowView()

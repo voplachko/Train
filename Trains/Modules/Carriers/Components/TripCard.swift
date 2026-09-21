@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct TripCard: View {
+    // MARK: - Properties
+
     let trip: Trip
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: Dimen.x5) {
@@ -22,6 +26,8 @@ struct TripCard: View {
         )
     }
 
+    // MARK: - Subviews
+
     private var header: some View {
         HStack(alignment: .top, spacing: Dimen.x2) {
             CarrierLogo(carrier: trip.carrier)
@@ -30,13 +36,13 @@ struct TripCard: View {
                 Text(trip.carrier.name)
                     .font(.regular17)
                     .foregroundStyle(Color.appBlackUniversal)
-                    .lineLimit(1)
+                    .lineLimit(AppStyle.singleLine)
 
                 if let transferText = trip.transferText {
                     Text(transferText)
                         .font(.regular12)
                         .foregroundStyle(Color.appRed)
-                        .lineLimit(1)
+                        .lineLimit(AppStyle.singleLine)
                 }
             }
 
@@ -45,7 +51,7 @@ struct TripCard: View {
             Text(trip.date)
                 .font(.regular12)
                 .foregroundStyle(Color.appBlackUniversal)
-                .lineLimit(1)
+                .lineLimit(AppStyle.singleLine)
         }
     }
 
@@ -60,7 +66,7 @@ struct TripCard: View {
             Text(trip.durationText)
                 .font(.regular12)
                 .foregroundStyle(Color.appBlackUniversal)
-                .lineLimit(1)
+                .lineLimit(AppStyle.singleLine)
                 .fixedSize()
 
             separator
@@ -77,6 +83,8 @@ struct TripCard: View {
             .frame(height: Dimen.hairline)
     }
 }
+
+// MARK: - Logo
 
 private struct CarrierLogo: View {
     let carrier: Carrier
@@ -105,9 +113,11 @@ private struct CarrierLogo: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
     VStack(spacing: Dimen.x2) {
-        ForEach(MockTripRepository().trips(for: RouteQuery(from: "Москва", to: "Сочи")).prefix(2)) { trip in
+        ForEach(MockData.trips.prefix(2)) { trip in
             TripCard(trip: trip)
         }
     }

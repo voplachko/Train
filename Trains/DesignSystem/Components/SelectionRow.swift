@@ -8,18 +8,22 @@
 import SwiftUI
 
 struct SelectionRow: View {
+    // MARK: - Properties
+
     let title: String
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: Dimen.x4) {
             Text(title)
                 .font(.regular17)
                 .foregroundStyle(Color.appBlack)
-                .lineLimit(1)
+                .lineLimit(AppStyle.singleLine)
 
             Spacer(minLength: 0)
 
-            Image(systemName: "chevron.forward")
+            Image(symbol: .chevronForward)
                 .font(.system(size: Dimen.x4, weight: .semibold))
                 .foregroundStyle(Color.appBlack)
         }
@@ -29,9 +33,12 @@ struct SelectionRow: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
     VStack(spacing: 0) {
-        SelectionRow(title: "Москва")
-        SelectionRow(title: "Санкт Петербург")
+        ForEach(MockData.cities.prefix(2)) { city in
+            SelectionRow(title: city.name)
+        }
     }
 }

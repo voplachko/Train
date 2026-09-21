@@ -8,13 +8,19 @@
 import Foundation
 
 struct TripFilters: Equatable {
+    // MARK: - Properties
+
     var intervals: Set<DepartureInterval>
     var allowsTransfers: Bool?
+
+    // MARK: - Init
 
     init(intervals: Set<DepartureInterval> = [], allowsTransfers: Bool? = nil) {
         self.intervals = intervals
         self.allowsTransfers = allowsTransfers
     }
+
+    // MARK: - Filtering
 
     var isEmpty: Bool {
         intervals.isEmpty && allowsTransfers == nil

@@ -8,41 +8,47 @@
 import SwiftUI
 
 struct FiltersView: View {
+    // MARK: - Properties
+
     @Binding var applied: TripFilters
 
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel: FiltersViewModel
+
+    // MARK: - Init
 
     init(applied: Binding<TripFilters>) {
         _applied = applied
         _viewModel = State(initialValue: FiltersViewModel(filters: applied.wrappedValue))
     }
 
+    // MARK: - Body
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            sectionTitle("Время отправления")
+            sectionTitle(Strings.Filters.departureTime)
 
             ForEach(DepartureInterval.allCases) { interval in
                 row(
                     title: interval.title,
-                    iconName: viewModel.isSelected(interval) ? "checkmark.square.fill" : "square"
+                    symbol: .checkbox(isOn: viewModel.isSelected(interval))
                 ) {
                     viewModel.toggle(interval)
                 }
             }
 
-            sectionTitle("Показывать варианты с пересадками")
+            sectionTitle(Strings.Filters.transfers)
 
             row(
-                title: "Да",
-                iconName: viewModel.isTransfersSelected(true) ? "largecircle.fill.circle" : "circle"
+                title: Strings.Filters.yes,
+                symbol: .radio(isOn: viewModel.isTransfersSelected(true))
             ) {
                 viewModel.selectTransfers(true)
             }
 
             row(
-                title: "Нет",
-                iconName: viewModel.isTransfersSelected(false) ? "largecircle.fill.circle" : "circle"
+                title: Strings.Filters.no,
+                symbol: .radio(isOn: viewModel.isTransfersSelected(false))
             ) {
                 viewModel.selectTransfers(false)
             }
@@ -54,20 +60,24 @@ struct FiltersView: View {
         .background(Color.appWhite)
         .overlay(alignment: .bottom) {
             if viewModel.isApplyVisible {
-                PrimaryButton.long("Применить", action: apply)
+                PrimaryButton.long(Strings.Filters.apply, action: apply)
                     .padding(.bottom, Dimen.x6)
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         }
-        .animation(.easeInOut(duration: 0.2), value: viewModel.isApplyVisible)
+        .animation(AppAnimation.quick, value: viewModel.isApplyVisible)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
     }
+
+    // MARK: - Actions
 
     private func apply() {
         applied = viewModel.draft
         dismiss()
     }
+
+    // MARK: - Subviews
 
     private func sectionTitle(_ title: String) -> some View {
         Text(title)
@@ -78,7 +88,7 @@ struct FiltersView: View {
             .padding(.vertical, Dimen.x4)
     }
 
-    private func row(title: String, iconName: String, action: @escaping () -> Void) -> some View {
+    private func row(title: String, symbol: SFSymbol, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: Dimen.x4) {
                 Text(title)
@@ -87,7 +97,7 @@ struct FiltersView: View {
 
                 Spacer(minLength: 0)
 
-                Image(systemName: iconName)
+                Image(symbol: symbol)
                     .font(.system(size: Dimen.x6))
                     .foregroundStyle(Color.appBlack)
             }
@@ -98,6 +108,8 @@ struct FiltersView: View {
         .buttonStyle(.plain)
     }
 }
+
+// MARK: - Previews
 
 #Preview("Пустой") {
     NavigationStack {

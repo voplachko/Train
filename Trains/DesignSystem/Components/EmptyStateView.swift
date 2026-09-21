@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct EmptyStateView: View {
+    // MARK: - Properties
+
     let title: String
+
+    // MARK: - Body
 
     var body: some View {
         Text(title)
@@ -20,6 +24,8 @@ struct EmptyStateView: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
-    EmptyStateView(title: "Вариантов нет")
+    EmptyStateView(title: Strings.Carriers.empty)
 }

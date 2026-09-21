@@ -8,7 +8,6 @@
 import CoreGraphics
 
 enum Dimen {
-
     // MARK: - Grid
 
     static let x1: CGFloat = 4
@@ -25,7 +24,7 @@ enum Dimen {
     static let x24: CGFloat = 96
     static let x56: CGFloat = 224
 
-    // MARK: - Values the design sets outside the grid
+    // MARK: - Outside the grid
 
     static let hairline: CGFloat = 1
     static let shortButtonWidth: CGFloat = 150

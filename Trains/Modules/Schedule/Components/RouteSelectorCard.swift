@@ -7,16 +7,18 @@
 
 import SwiftUI
 
-/// Blue card with the "Откуда" / "Куда" fields and the swap button.
 struct RouteSelectorCard: View {
+    // MARK: - Properties
+
     let from: String
     let to: String
     let onSelectFrom: () -> Void
     let onSelectTo: () -> Void
     let onSwap: () -> Void
 
-    /// Purely visual state of the swap button.
     @State private var swapRotation: Double = 0
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: Dimen.x4) {
@@ -30,17 +32,19 @@ struct RouteSelectorCard: View {
         )
     }
 
+    // MARK: - Subviews
+
     private var fields: some View {
         VStack(spacing: 0) {
             field(
                 value: from,
-                placeholder: "Откуда",
+                placeholder: Strings.RouteSearch.fromPlaceholder,
                 insertionEdge: .bottom,
                 action: onSelectFrom
             )
             field(
                 value: to,
-                placeholder: "Куда",
+                placeholder: Strings.RouteSearch.toPlaceholder,
                 insertionEdge: .top,
                 action: onSelectTo
             )
@@ -61,7 +65,7 @@ struct RouteSelectorCard: View {
             Text(value.isEmpty ? placeholder : value)
                 .font(.regular17)
                 .foregroundStyle(value.isEmpty ? Color.appGray : Color.appBlackUniversal)
-                .lineLimit(1)
+                .lineLimit(AppStyle.singleLine)
                 .truncationMode(.tail)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .id(value)
@@ -75,7 +79,6 @@ struct RouteSelectorCard: View {
         .buttonStyle(.plain)
     }
 
-    /// The value of one field slides out while the value of the other slides in.
     private func swapTransition(insertionEdge: Edge) -> AnyTransition {
         .asymmetric(
             insertion: .move(edge: insertionEdge).combined(with: .opacity),
@@ -91,16 +94,20 @@ struct RouteSelectorCard: View {
                 .rotationEffect(.degrees(swapRotation))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Поменять местами")
+        .accessibilityLabel(Strings.RouteSearch.swapAccessibilityLabel)
     }
 
+    // MARK: - Actions
+
     private func swap() {
-        withAnimation(.easeInOut(duration: 0.3)) {
-            swapRotation += 180
+        withAnimation(AppAnimation.standard) {
+            swapRotation += AppStyle.halfTurn
             onSwap()
         }
     }
 }
+
+// MARK: - Previews
 
 #Preview("Пустой") {
     RouteSelectorCard(
@@ -115,8 +122,8 @@ struct RouteSelectorCard: View {
 
 #Preview("Заполненный") {
     RouteSelectorCard(
-        from: "Москва (Курский вокзал)",
-        to: "Санкт Петербург (Балтийский вокзал)",
+        from: MockData.route.from,
+        to: MockData.route.to,
         onSelectFrom: {},
         onSelectTo: {},
         onSwap: {}

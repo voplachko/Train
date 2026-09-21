@@ -9,14 +9,20 @@ import SwiftUI
 
 @Observable
 final class FiltersViewModel {
+    // MARK: - Properties
+
     private let appliedFilters: TripFilters
 
     private(set) var draft: TripFilters
+
+    // MARK: - Init
 
     init(filters: TripFilters) {
         appliedFilters = filters
         draft = filters
     }
+
+    // MARK: - Output
 
     var isApplyVisible: Bool {
         !draft.isEmpty || draft != appliedFilters
@@ -25,6 +31,8 @@ final class FiltersViewModel {
     func isSelected(_ interval: DepartureInterval) -> Bool {
         draft.intervals.contains(interval)
     }
+
+    // MARK: - Intents
 
     func toggle(_ interval: DepartureInterval) {
         if draft.intervals.contains(interval) {

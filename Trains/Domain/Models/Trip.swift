@@ -8,6 +8,8 @@
 import Foundation
 
 struct Trip: Identifiable, Hashable {
+    // MARK: - Properties
+
     let id: UUID
     let carrier: Carrier
     let date: String
@@ -15,6 +17,8 @@ struct Trip: Identifiable, Hashable {
     let arrival: String
     let durationHours: Int
     let transferCity: String?
+
+    // MARK: - Init
 
     init(
         id: UUID = UUID(),
@@ -34,6 +38,8 @@ struct Trip: Identifiable, Hashable {
         self.transferCity = transferCity
     }
 
+    // MARK: - Presentation
+
     var hasTransfer: Bool {
         transferCity != nil
     }
@@ -43,20 +49,10 @@ struct Trip: Identifiable, Hashable {
     }
 
     var durationText: String {
-        "\(durationHours) \(Self.hoursWord(for: durationHours))"
+        Strings.Carriers.duration(hours: durationHours)
     }
 
     var transferText: String? {
-        transferCity.map { "С пересадкой в \($0)" }
-    }
-
-    private static func hoursWord(for value: Int) -> String {
-        if (11...14).contains(value % 100) { return "часов" }
-
-        switch value % 10 {
-        case 1: return "час"
-        case 2, 3, 4: return "часа"
-        default: return "часов"
-        }
+        transferCity.map(Strings.Carriers.transfer(city:))
     }
 }

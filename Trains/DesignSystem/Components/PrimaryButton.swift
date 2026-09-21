@@ -13,15 +13,21 @@ struct PrimaryButton: View {
         case long(showsIndicator: Bool)
     }
 
+    // MARK: - Properties
+
     private let title: String
     private let kind: Kind
     private let action: () -> Void
+
+    // MARK: - Init
 
     private init(title: String, kind: Kind, action: @escaping () -> Void) {
         self.title = title
         self.kind = kind
         self.action = action
     }
+
+    // MARK: - Factory
 
     static func short(_ title: String, action: @escaping () -> Void) -> PrimaryButton {
         PrimaryButton(title: title, kind: .short, action: action)
@@ -34,6 +40,8 @@ struct PrimaryButton: View {
     ) -> PrimaryButton {
         PrimaryButton(title: title, kind: .long(showsIndicator: showsIndicator), action: action)
     }
+
+    // MARK: - Body
 
     var body: some View {
         switch kind {
@@ -48,12 +56,14 @@ struct PrimaryButton: View {
         }
     }
 
+    // MARK: - Subviews
+
     private func button(showsIndicator: Bool) -> some View {
         Button(action: action) {
             HStack(spacing: Dimen.x1) {
                 Text(title)
                     .font(.bold17)
-                    .lineLimit(1)
+                    .lineLimit(AppStyle.singleLine)
 
                 if showsIndicator {
                     Circle()
@@ -69,6 +79,8 @@ struct PrimaryButton: View {
     }
 }
 
+// MARK: - Style
+
 private struct PrimaryButtonStyle: ButtonStyle {
     private let shape = RoundedRectangle(cornerRadius: Dimen.x4, style: .continuous)
 
@@ -77,14 +89,16 @@ private struct PrimaryButtonStyle: ButtonStyle {
             .foregroundStyle(Color.appWhiteUniversal)
             .background(shape.fill(Color.appBlue))
             .contentShape(shape)
-            .opacity(configuration.isPressed ? 0.7 : 1)
+            .opacity(configuration.isPressed ? AppStyle.pressedOpacity : 1)
     }
 }
 
+// MARK: - Preview
+
 #Preview {
     VStack(spacing: Dimen.x6) {
-        PrimaryButton.short("Найти") {}
-        PrimaryButton.long("Применить") {}
-        PrimaryButton.long("Уточнить время", showsIndicator: true) {}
+        PrimaryButton.short(Strings.RouteSearch.search) {}
+        PrimaryButton.long(Strings.Filters.apply) {}
+        PrimaryButton.long(Strings.Carriers.refineTime, showsIndicator: true) {}
     }
 }

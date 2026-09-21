@@ -12,6 +12,6 @@ struct RouteQuery: Hashable {
     let to: String
 
     var title: String {
-        "\(from) → \(to)"
+        Strings.Carriers.route(from: from, to: to)
     }
 }

@@ -9,17 +9,22 @@ import SwiftUI
 
 @Observable
 final class StationSelectionViewModel {
+    // MARK: - Properties
+
     var query = ""
 
     private let allStations: [Station]
+
+    // MARK: - Init
 
     init(city: City) {
         allStations = city.stations
     }
 
+    // MARK: - Output
+
     var stations: [Station] {
-        guard !query.isEmpty else { return allStations }
-        return allStations.filter { $0.name.localizedCaseInsensitiveContains(query) }
+        allStations.filtered(byName: query)
     }
 
     var isEmpty: Bool {

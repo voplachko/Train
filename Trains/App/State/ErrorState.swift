@@ -9,7 +9,11 @@ import SwiftUI
 
 @Observable
 final class ErrorState {
+    // MARK: - Properties
+
     private(set) var current: AppError?
+
+    // MARK: - Methods
 
     func show(_ error: AppError) {
         current = error

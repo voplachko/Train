@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct RootTabView: View {
-    enum Tab {
+    private enum Tab {
         case schedule
         case settings
     }
 
+    // MARK: - Properties
+
     @Environment(ErrorState.self) private var errorState
 
     @State private var selectedTab: Tab = .schedule
+
+    // MARK: - Body
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -36,12 +40,16 @@ struct RootTabView: View {
         .tint(Color.appBlack)
     }
 
+    // MARK: - Actions
+
     private func clearErrorInDebug() {
         #if DEBUG
         errorState.clear()
         #endif
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     RootTabView()

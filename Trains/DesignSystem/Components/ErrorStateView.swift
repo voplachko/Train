@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct ErrorStateView: View {
+    // MARK: - Properties
+
     let error: AppError
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: Dimen.x4) {
@@ -28,6 +32,8 @@ struct ErrorStateView: View {
     }
 }
 
+// MARK: - Modifier
+
 extension View {
     func errorOverlay(_ error: AppError?, onTap: (() -> Void)? = nil) -> some View {
         overlay {
@@ -38,9 +44,11 @@ extension View {
                     .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.2), value: error)
+        .animation(AppAnimation.quick, value: error)
     }
 }
+
+// MARK: - Previews
 
 #Preview("Ошибка сервера") {
     ErrorStateView(error: .server)

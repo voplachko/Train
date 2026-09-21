@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct CarriersView: View {
+    // MARK: - Properties
+
     @Binding var filters: TripFilters
     let onRefineTime: () -> Void
 
     @State private var viewModel: CarriersViewModel
+
+    // MARK: - Init
 
     init(route: RouteQuery, filters: Binding<TripFilters>, onRefineTime: @escaping () -> Void) {
         _filters = filters
@@ -23,6 +27,8 @@ struct CarriersView: View {
         viewModel.trips(matching: filters)
     }
 
+    // MARK: - Body
+
     var body: some View {
         VStack(alignment: .leading, spacing: Dimen.x4) {
             Text(viewModel.route.title)
@@ -33,7 +39,7 @@ struct CarriersView: View {
 
             if trips.isEmpty {
                 Spacer()
-                EmptyStateView(title: "Вариантов нет")
+                EmptyStateView(title: Strings.Carriers.empty)
                 Spacer()
             } else {
                 tripsList
@@ -44,7 +50,7 @@ struct CarriersView: View {
         .background(Color.appWhite)
         .overlay(alignment: .bottom) {
             PrimaryButton.long(
-                "Уточнить время",
+                Strings.Carriers.refineTime,
                 showsIndicator: !filters.isEmpty,
                 action: onRefineTime
             )
@@ -53,6 +59,8 @@ struct CarriersView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
     }
+
+    // MARK: - Subviews
 
     private var tripsList: some View {
         ScrollView(showsIndicators: false) {
@@ -67,13 +75,12 @@ struct CarriersView: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
     NavigationStack {
         CarriersView(
-            route: RouteQuery(
-                from: "Москва (Ярославский вокзал)",
-                to: "Санкт Петербург (Балтийский вокзал)"
-            ),
+            route: MockData.route,
             filters: .constant(TripFilters()),
             onRefineTime: {}
         )
