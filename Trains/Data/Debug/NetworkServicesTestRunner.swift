@@ -9,6 +9,7 @@ import Foundation
 import OpenAPIRuntime
 import OpenAPIURLSession
 
+#if DEBUG
 private enum TestInput {
     static let lat = 59.864177
     static let lng = 30.319163
@@ -93,3 +94,4 @@ private func todayString() -> String {
     formatter.dateFormat = "yyyy-MM-dd"
     return formatter.string(from: Date())
 }
+#endif

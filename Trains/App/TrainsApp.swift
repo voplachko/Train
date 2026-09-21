@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct TrainsApp: App {
+    @State private var errorState = ErrorState()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootTabView()
+                .environment(errorState)
         }
     }
 }

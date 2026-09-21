@@ -16,9 +16,7 @@ protocol AllStationsServiceProtocol {
 }
 
 final class AllStationsService: BaseAPIService, AllStationsServiceProtocol {
-    /// Ответ /stations_list/ приходит с Content-Type: text/html,
-    /// поэтому тело собирается вручную и декодируется как JSON.
-    private static let responseSizeLimit = 50 * 1024 * 1024 // 50 MB
+    private static let responseSizeLimit = 50 * 1024 * 1024 
 
     func getAllStations() async throws -> AllStations {
         let response = try await client.getAllStations(query: .init())
