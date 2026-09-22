@@ -16,5 +16,6 @@ enum ScheduleRoute: Hashable {
     case citySelection(field: RouteField)
     case stationSelection(field: RouteField, city: City)
     case carriers(RouteQuery)
+    case carrierDetails(Carrier)
     case filters
 }

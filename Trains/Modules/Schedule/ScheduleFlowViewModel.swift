@@ -65,4 +65,8 @@ final class ScheduleFlowViewModel {
     func refineTime() {
         path.append(.filters)
     }
+
+    func showCarrierDetails(_ carrier: Carrier) {
+        path.append(.carrierDetails(carrier))
+    }
 }

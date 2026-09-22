@@ -45,7 +45,15 @@ struct ScheduleFlowView: View {
             }
 
         case .carriers(let route):
-            CarriersView(route: route, filters: $viewModel.filters, onRefineTime: viewModel.refineTime)
+            CarriersView(
+                route: route,
+                filters: $viewModel.filters,
+                onRefineTime: viewModel.refineTime,
+                onSelectCarrier: viewModel.showCarrierDetails
+            )
+
+        case .carrierDetails(let carrier):
+            CarrierDetailsView(carrier: carrier)
 
         case .filters:
             FiltersView(applied: $viewModel.filters)
@@ -57,4 +65,5 @@ struct ScheduleFlowView: View {
 
 #Preview {
     ScheduleFlowView()
+        .environment(StoriesStore())
 }

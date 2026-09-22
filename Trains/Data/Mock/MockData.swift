@@ -11,6 +11,7 @@ enum MockData {
     // MARK: - Samples
 
     static let cities = MockCityRepository().cities()
+    static let stories = MockStoryRepository().stories()
 
     static var city: City {
         cities[0]
@@ -22,6 +23,16 @@ enum MockData {
 
     static var trips: [Trip] {
         MockTripRepository().trips(for: route)
+    }
+
+    static var carrier: Carrier {
+        trips[0].carrier
+    }
+
+    static var viewedStory: Story {
+        var story = stories[1]
+        story.isViewed = true
+        return story
     }
 
     // MARK: - Helpers

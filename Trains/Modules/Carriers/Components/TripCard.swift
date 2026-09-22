@@ -84,35 +84,6 @@ struct TripCard: View {
     }
 }
 
-// MARK: - Logo
-
-private struct CarrierLogo: View {
-    let carrier: Carrier
-
-    var body: some View {
-        Group {
-            if let logoURL = carrier.logoURL {
-                AsyncImage(url: logoURL) { image in
-                    image.resizable().scaledToFit()
-                } placeholder: {
-                    placeholder
-                }
-            } else {
-                placeholder
-            }
-        }
-        .frame(width: Dimen.x9, height: Dimen.x9)
-        .background(Color.appWhiteUniversal)
-        .clipShape(RoundedRectangle(cornerRadius: Dimen.x3, style: .continuous))
-    }
-
-    private var placeholder: some View {
-        Text(String(carrier.name.prefix(1)))
-            .font(.bold17)
-            .foregroundStyle(Color.appGray)
-    }
-}
-
 // MARK: - Preview
 
 #Preview {
