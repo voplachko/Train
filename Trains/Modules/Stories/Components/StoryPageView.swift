@@ -55,6 +55,8 @@ struct StoryPageView: View {
 // MARK: - Preview
 
 #Preview {
-    StoryPageView(story: MockData.stories[0])
-        .ignoresSafeArea()
+    if let story = MockData.story {
+        StoryPageView(story: story)
+            .ignoresSafeArea()
+    }
 }

@@ -57,7 +57,12 @@ struct StoryPreviewCard: View {
 
 #Preview {
     HStack(spacing: Dimen.x3) {
-        StoryPreviewCard(story: MockData.stories[0])
-        StoryPreviewCard(story: MockData.viewedStory)
+        if let story = MockData.story {
+            StoryPreviewCard(story: story)
+        }
+
+        if let viewedStory = MockData.viewedStory {
+            StoryPreviewCard(story: viewedStory)
+        }
     }
 }

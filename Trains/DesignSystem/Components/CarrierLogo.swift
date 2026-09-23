@@ -108,10 +108,14 @@ struct CarrierLogo: View {
 // MARK: - Previews
 
 #Preview("Маленький") {
-    CarrierLogo(carrier: MockData.carrier)
+    if let carrier = MockData.carrier {
+        CarrierLogo(carrier: carrier)
+    }
 }
 
 #Preview("Большой") {
-    CarrierLogo(carrier: MockData.carrier, size: .large)
-        .padding(.horizontal, Dimen.x4)
+    if let carrier = MockData.carrier {
+        CarrierLogo(carrier: carrier, size: .large)
+            .padding(.horizontal, Dimen.x4)
+    }
 }

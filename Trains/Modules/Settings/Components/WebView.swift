@@ -11,10 +11,18 @@ import WebKit
 struct WebView: UIViewRepresentable {
     // MARK: - Properties
 
-    let url: URL
+    private let url: URL
 
-    @Binding var isLoading: Bool
-    @Binding var hasFailed: Bool
+    @Binding private var isLoading: Bool
+    @Binding private var hasFailed: Bool
+
+    // MARK: - Init
+
+    init(url: URL, isLoading: Binding<Bool>, hasFailed: Binding<Bool>) {
+        self.url = url
+        _isLoading = isLoading
+        _hasFailed = hasFailed
+    }
 
     // MARK: - UIViewRepresentable
 
@@ -24,15 +32,21 @@ struct WebView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
-        webView.navigationDelegate = context.coordinator
-        webView.isOpaque = false
-        webView.backgroundColor = .clear
-        webView.scrollView.backgroundColor = .clear
-        webView.load(URLRequest(url: url))
+        setup(webView, delegate: context.coordinator)
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {}
+
+    // MARK: - Setup
+
+    private func setup(_ webView: WKWebView, delegate: WKNavigationDelegate) {
+        webView.navigationDelegate = delegate
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.scrollView.backgroundColor = .clear
+        webView.load(URLRequest(url: url))
+    }
 
     // MARK: - Coordinator
 

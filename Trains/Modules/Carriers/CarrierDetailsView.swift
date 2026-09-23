@@ -84,6 +84,8 @@ struct CarrierDetailsView: View {
 
 #Preview {
     NavigationStack {
-        CarrierDetailsView(carrier: MockData.carrier)
+        if let carrier = MockData.carrier {
+            CarrierDetailsView(carrier: carrier)
+        }
     }
 }
