@@ -12,14 +12,21 @@ struct CarriersView: View {
 
     @Binding var filters: TripFilters
     let onRefineTime: () -> Void
+    let onSelectCarrier: (Carrier) -> Void
 
     @State private var viewModel: CarriersViewModel
 
     // MARK: - Init
 
-    init(route: RouteQuery, filters: Binding<TripFilters>, onRefineTime: @escaping () -> Void) {
+    init(
+        route: RouteQuery,
+        filters: Binding<TripFilters>,
+        onRefineTime: @escaping () -> Void,
+        onSelectCarrier: @escaping (Carrier) -> Void
+    ) {
         _filters = filters
         self.onRefineTime = onRefineTime
+        self.onSelectCarrier = onSelectCarrier
         _viewModel = State(initialValue: CarriersViewModel(route: route))
     }
 
@@ -66,7 +73,12 @@ struct CarriersView: View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: Dimen.x2) {
                 ForEach(trips) { trip in
-                    TripCard(trip: trip)
+                    Button {
+                        onSelectCarrier(trip.carrier)
+                    } label: {
+                        TripCard(trip: trip)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal, Dimen.x4)
@@ -82,7 +94,8 @@ struct CarriersView: View {
         CarriersView(
             route: MockData.route,
             filters: .constant(TripFilters()),
-            onRefineTime: {}
+            onRefineTime: {},
+            onSelectCarrier: { _ in }
         )
     }
 }

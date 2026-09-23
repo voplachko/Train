@@ -16,16 +16,28 @@ enum Dimen {
     static let x4: CGFloat = 16
     static let x5: CGFloat = 20
     static let x6: CGFloat = 24
+    static let x7: CGFloat = 28
     static let x8: CGFloat = 32
     static let x9: CGFloat = 36
     static let x10: CGFloat = 40
     static let x12: CGFloat = 48
     static let x15: CGFloat = 60
     static let x24: CGFloat = 96
+    static let x26: CGFloat = 104
     static let x56: CGFloat = 224
 
     // MARK: - Outside the grid
 
     static let hairline: CGFloat = 1
     static let shortButtonWidth: CGFloat = 150
+
+    // MARK: - Stories
+
+    static let storyPreviewWidth: CGFloat = 92
+    static let storyPreviewHeight: CGFloat = 140
+    static let storyBorderWidth: CGFloat = 4
+    static let storyCornerRadius: CGFloat = 16
+    static let storyPageCornerRadius: CGFloat = 40
+    static let progressBarHeight: CGFloat = 6
+    static let closeButtonSize: CGFloat = 30
 }

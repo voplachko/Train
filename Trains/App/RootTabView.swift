@@ -54,4 +54,6 @@ struct RootTabView: View {
 #Preview {
     RootTabView()
         .environment(ErrorState())
+        .environment(ThemeStore())
+        .environment(StoriesStore())
 }

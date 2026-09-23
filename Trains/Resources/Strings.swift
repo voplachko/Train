@@ -61,6 +61,13 @@ enum Strings {
         }
     }
 
+    enum CarrierDetails {
+        static let title = "Информация о перевозчике"
+        static let email = "E-mail"
+        static let phone = "Телефон"
+        static let logoAccessibilityLabel = "Логотип перевозчика"
+    }
+
     enum Filters {
         static let departureTime = "Время отправления"
         static let transfers = "Показывать варианты с пересадками"
@@ -76,6 +83,18 @@ enum Strings {
 
     enum Settings {
         static let title = "Настройки"
+        static let darkTheme = "Темная тема"
+        static let agreement = "Пользовательское соглашение"
+        static let apiNotice = "Приложение использует API «Яндекс.Расписания»"
+        static let version = "Версия 1.0 (beta)"
+    }
+
+    enum Stories {
+        static let close = "Закрыть"
+
+        static func accessibilityLabel(title: String, isViewed: Bool) -> String {
+            isViewed ? "\(title). Просмотрено" : title
+        }
     }
 
     enum Errors {

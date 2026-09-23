@@ -58,6 +58,8 @@ struct StationSelectionView: View {
 
 #Preview {
     NavigationStack {
-        StationSelectionView(city: MockData.city) { _ in }
+        if let city = MockData.city {
+            StationSelectionView(city: city) { _ in }
+        }
     }
 }
