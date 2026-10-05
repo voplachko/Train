@@ -13,13 +13,13 @@ struct FiltersView: View {
     @Binding var applied: TripFilters
 
     @Environment(\.dismiss) private var dismiss
-    @State private var viewModel: FiltersViewModel
+    @StateObject private var viewModel: FiltersViewModel
 
     // MARK: - Init
 
     init(applied: Binding<TripFilters>) {
         _applied = applied
-        _viewModel = State(initialValue: FiltersViewModel(filters: applied.wrappedValue))
+        _viewModel = StateObject(wrappedValue: FiltersViewModel(filters: applied.wrappedValue))
     }
 
     // MARK: - Body

@@ -16,7 +16,19 @@ enum APIConfiguration {
         Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport(),
-            middlewares: [AuthMiddleware(apikey: apiKey)]
+            middlewares: middlewares
         )
+    }
+
+    // MARK: - Private
+
+    private static var middlewares: [any ClientMiddleware] {
+        var middlewares: [any ClientMiddleware] = [AuthMiddleware(apikey: apiKey)]
+
+        #if DEBUG
+        middlewares.append(LoggingMiddleware())
+        #endif
+
+        return middlewares
     }
 }

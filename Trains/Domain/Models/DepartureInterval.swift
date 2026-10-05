@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum DepartureInterval: CaseIterable, Identifiable, Hashable {
+enum DepartureInterval: CaseIterable, Identifiable, Hashable, Sendable {
     case morning
     case day
     case evening

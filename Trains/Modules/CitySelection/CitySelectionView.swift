@@ -12,7 +12,17 @@ struct CitySelectionView: View {
 
     let onSelect: (City) -> Void
 
-    @State private var viewModel = CitySelectionViewModel()
+    @StateObject private var viewModel: CitySelectionViewModel
+
+    // MARK: - Init
+
+    init(
+        repository: any CityRepository = AppDependencies.cityRepository,
+        onSelect: @escaping (City) -> Void
+    ) {
+        self.onSelect = onSelect
+        _viewModel = StateObject(wrappedValue: CitySelectionViewModel(repository: repository))
+    }
 
     // MARK: - Body
 
@@ -31,10 +41,14 @@ struct CitySelectionView: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .overlay {
-            if viewModel.isEmpty {
+            if viewModel.state.isLoading {
+                ProgressView()
+                    .tint(Color.appBlack)
+            } else if viewModel.isEmpty {
                 EmptyStateView(title: Strings.CitySelection.notFound)
             }
         }
+        .errorOverlay(viewModel.state.error, onTap: viewModel.retry)
         .searchable(
             text: $viewModel.query,
             placement: .navigationBarDrawer(displayMode: .always),
@@ -44,6 +58,9 @@ struct CitySelectionView: View {
         .navigationTitle(Strings.CitySelection.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        .task(id: viewModel.reloadToken) {
+            await viewModel.loadCities()
+        }
     }
 }
 
@@ -51,6 +68,6 @@ struct CitySelectionView: View {
 
 #Preview {
     NavigationStack {
-        CitySelectionView { _ in }
+        CitySelectionView(repository: MockCityRepository()) { _ in }
     }
 }

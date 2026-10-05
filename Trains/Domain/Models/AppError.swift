@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum AppError: Identifiable, Hashable {
+enum AppError: Identifiable, Hashable, Sendable {
     case server
     case noInternet
 

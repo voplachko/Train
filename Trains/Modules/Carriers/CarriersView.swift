@@ -14,12 +14,13 @@ struct CarriersView: View {
     let onRefineTime: () -> Void
     let onSelectCarrier: (Carrier) -> Void
 
-    @State private var viewModel: CarriersViewModel
+    @StateObject private var viewModel: CarriersViewModel
 
     // MARK: - Init
 
     init(
         route: RouteQuery,
+        repository: any TripRepository = AppDependencies.tripRepository,
         filters: Binding<TripFilters>,
         onRefineTime: @escaping () -> Void,
         onSelectCarrier: @escaping (Carrier) -> Void
@@ -27,7 +28,7 @@ struct CarriersView: View {
         _filters = filters
         self.onRefineTime = onRefineTime
         self.onSelectCarrier = onSelectCarrier
-        _viewModel = State(initialValue: CarriersViewModel(route: route))
+        _viewModel = StateObject(wrappedValue: CarriersViewModel(route: route, repository: repository))
     }
 
     private var trips: [Trip] {
@@ -44,30 +45,47 @@ struct CarriersView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, Dimen.x4)
 
-            if trips.isEmpty {
-                Spacer()
-                EmptyStateView(title: Strings.Carriers.empty)
-                Spacer()
-            } else {
-                tripsList
-            }
+            content
         }
         .padding(.top, Dimen.x4)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Color.appWhite)
         .overlay(alignment: .bottom) {
-            PrimaryButton.long(
-                Strings.Carriers.refineTime,
-                showsIndicator: !filters.isEmpty,
-                action: onRefineTime
-            )
-            .padding(.bottom, Dimen.x6)
+            if viewModel.state.isLoaded {
+                PrimaryButton.long(
+                    Strings.Carriers.refineTime,
+                    showsIndicator: !filters.isEmpty,
+                    action: onRefineTime
+                )
+                .padding(.bottom, Dimen.x6)
+            }
         }
+        .errorOverlay(viewModel.state.error, onTap: viewModel.retry)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        .task(id: viewModel.reloadToken) {
+            await viewModel.loadTrips()
+        }
     }
 
     // MARK: - Subviews
+
+    @ViewBuilder
+    private var content: some View {
+        if viewModel.state.isLoading {
+            Spacer()
+            ProgressView()
+                .tint(Color.appBlack)
+                .frame(maxWidth: .infinity)
+            Spacer()
+        } else if viewModel.state.isLoaded && trips.isEmpty {
+            Spacer()
+            EmptyStateView(title: Strings.Carriers.empty)
+            Spacer()
+        } else {
+            tripsList
+        }
+    }
 
     private var tripsList: some View {
         ScrollView(showsIndicators: false) {
@@ -93,6 +111,7 @@ struct CarriersView: View {
     NavigationStack {
         CarriersView(
             route: MockData.route,
+            repository: MockTripRepository(),
             filters: .constant(TripFilters()),
             onRefineTime: {},
             onSelectCarrier: { _ in }

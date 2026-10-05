@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct City: Identifiable, Hashable {
+struct City: Identifiable, Hashable, Sendable {
     // MARK: - Properties
 
-    let id: UUID
+    let id: String
     let name: String
     let stations: [Station]
 
     // MARK: - Init
 
-    init(id: UUID = UUID(), name: String, stations: [Station]) {
+    init(id: String = UUID().uuidString, name: String, stations: [Station]) {
         self.id = id
         self.name = name
         self.stations = stations

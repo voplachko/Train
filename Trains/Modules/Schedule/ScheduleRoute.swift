@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum RouteField: Hashable {
+enum RouteField: Hashable, Sendable {
     case from
     case to
 }
 
-enum ScheduleRoute: Hashable {
+enum ScheduleRoute: Hashable, Sendable {
     case citySelection(field: RouteField)
     case stationSelection(field: RouteField, city: City)
     case carriers(RouteQuery)

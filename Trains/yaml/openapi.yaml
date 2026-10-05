@@ -475,6 +475,33 @@ components:
         duration:
           type: integer
           description: Длительность рейса в секундах
+        start_date:
+          type: string
+          description: Дата отправления рейса в формате YYYY-MM-DD
+        has_transfers:
+          type: boolean
+          description: Признак наличия пересадок по маршруту
+        transfers:
+          type: array
+          description: Пункты пересадок (только для маршрутов с пересадками)
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              title:
+                type: string
+                description: Название пункта пересадки
+        details:
+          type: array
+          description: Участки маршрута с пересадками
+          items:
+            type: object
+            properties:
+              is_transfer:
+                type: boolean
+              thread:
+                $ref: '#/components/schemas/Thread'
     Pagination:
       type: object
       properties:

@@ -119,14 +119,3 @@ struct RouteSelectorCard: View {
     )
     .padding(.horizontal, Dimen.x4)
 }
-
-#Preview("Заполненный") {
-    RouteSelectorCard(
-        from: MockData.route.from,
-        to: MockData.route.to,
-        onSelectFrom: {},
-        onSelectTo: {},
-        onSwap: {}
-    )
-    .padding(.horizontal, Dimen.x4)
-}

@@ -37,6 +37,18 @@ enum Strings {
     enum Carriers {
         static let empty = "Вариантов нет"
         static let refineTime = "Уточнить время"
+        static let withTransfer = "С пересадкой"
+        static let unknownCarrier = "Перевозчик не указан"
+
+        private static let monthsGenitive = [
+            "января", "февраля", "марта", "апреля", "мая", "июня",
+            "июля", "августа", "сентября", "октября", "ноября", "декабря"
+        ]
+
+        static func date(day: Int, month: Int) -> String {
+            guard monthsGenitive.indices.contains(month - 1) else { return "\(day)" }
+            return "\(day) \(monthsGenitive[month - 1])"
+        }
 
         static func route(from: String, to: String) -> String {
             "\(from) → \(to)"
@@ -86,7 +98,10 @@ enum Strings {
         static let darkTheme = "Темная тема"
         static let agreement = "Пользовательское соглашение"
         static let apiNotice = "Приложение использует API «Яндекс.Расписания»"
-        static let version = "Версия 1.0 (beta)"
+
+        static func version(_ version: String) -> String {
+            "Версия \(version) (beta)"
+        }
     }
 
     enum Stories {
@@ -101,12 +116,4 @@ enum Strings {
         static let server = "Ошибка сервера"
         static let noInternet = "Нет интернета"
     }
-
-    #if DEBUG
-    enum Debug {
-        static let showServerError = "Показать «Ошибка сервера»"
-        static let showNoInternet = "Показать «Нет интернета»"
-        static let clearError = "Убрать ошибку"
-    }
-    #endif
 }

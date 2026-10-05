@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Story: Identifiable {
+struct Story: Identifiable, Sendable {
     // MARK: - Properties
 
     let id: Int

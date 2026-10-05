@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TripRepository {
-    func trips(for route: RouteQuery) -> [Trip]
+protocol TripRepository: Sendable {
+    func trips(for route: RouteQuery) async throws -> [Trip]
 }

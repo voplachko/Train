@@ -10,7 +10,7 @@ import SwiftUI
 struct RouteSearchView: View {
     // MARK: - Properties
 
-    let viewModel: ScheduleFlowViewModel
+    @ObservedObject var viewModel: ScheduleFlowViewModel
 
     @Environment(StoriesStore.self) private var storiesStore
 
@@ -56,8 +56,8 @@ struct RouteSearchView: View {
     private var searchCard: some View {
         VStack(spacing: Dimen.x4) {
             RouteSelectorCard(
-                from: viewModel.from,
-                to: viewModel.to,
+                from: viewModel.fromTitle,
+                to: viewModel.toTitle,
                 onSelectFrom: { viewModel.selectPoint(for: .from) },
                 onSelectTo: { viewModel.selectPoint(for: .to) },
                 onSwap: viewModel.swapRoute
