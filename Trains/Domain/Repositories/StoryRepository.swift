@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol StoryRepository {
+protocol StoryRepository: Sendable {
     func stories() -> [Story]
 }

@@ -7,27 +7,29 @@
 
 import Foundation
 
-struct Trip: Identifiable, Hashable {
+struct Trip: Identifiable, Hashable, Sendable {
     // MARK: - Properties
 
-    let id: UUID
+    let id: String
     let carrier: Carrier
     let date: String
     let departure: String
     let arrival: String
     let durationHours: Int
     let transferCity: String?
+    let hasTransfer: Bool
 
     // MARK: - Init
 
     init(
-        id: UUID = UUID(),
+        id: String = UUID().uuidString,
         carrier: Carrier,
         date: String,
         departure: String,
         arrival: String,
         durationHours: Int,
-        transferCity: String? = nil
+        transferCity: String? = nil,
+        hasTransfer: Bool? = nil
     ) {
         self.id = id
         self.carrier = carrier
@@ -36,13 +38,10 @@ struct Trip: Identifiable, Hashable {
         self.arrival = arrival
         self.durationHours = durationHours
         self.transferCity = transferCity
+        self.hasTransfer = hasTransfer ?? (transferCity != nil)
     }
 
     // MARK: - Presentation
-
-    var hasTransfer: Bool {
-        transferCity != nil
-    }
 
     var departureHour: Int? {
         Int(departure.prefix(2))
@@ -53,6 +52,7 @@ struct Trip: Identifiable, Hashable {
     }
 
     var transferText: String? {
-        transferCity.map(Strings.Carriers.transfer(city:))
+        guard hasTransfer else { return nil }
+        return transferCity.map(Strings.Carriers.transfer(city:)) ?? Strings.Carriers.withTransfer
     }
 }

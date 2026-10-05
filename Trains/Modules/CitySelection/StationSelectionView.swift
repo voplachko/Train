@@ -12,13 +12,13 @@ struct StationSelectionView: View {
 
     let onSelect: (Station) -> Void
 
-    @State private var viewModel: StationSelectionViewModel
+    @StateObject private var viewModel: StationSelectionViewModel
 
     // MARK: - Init
 
     init(city: City, onSelect: @escaping (Station) -> Void) {
         self.onSelect = onSelect
-        _viewModel = State(initialValue: StationSelectionViewModel(city: city))
+        _viewModel = StateObject(wrappedValue: StationSelectionViewModel(city: city))
     }
 
     // MARK: - Body

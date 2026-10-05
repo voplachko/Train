@@ -10,7 +10,7 @@ import Foundation
 enum MockData {
     // MARK: - Samples
 
-    static let cities = MockCityRepository().cities()
+    static let cities = MockCityRepository.sample
     static let stories = MockStoryRepository().stories()
 
     static var city: City? {
@@ -22,7 +22,7 @@ enum MockData {
     }
 
     static var trips: [Trip] {
-        MockTripRepository().trips(for: route)
+        MockTripRepository.sample
     }
 
     static var carrier: Carrier? {
@@ -42,9 +42,11 @@ enum MockData {
 
     // MARK: - Helpers
 
-    private static func point(_ city: City?) -> String {
-        guard let city, let station = city.stations.first else { return "" }
+    static func point(_ city: City?) -> RoutePoint {
+        guard let city, let station = city.stations.first else {
+            return RoutePoint(city: "", station: "", stationCode: "")
+        }
 
-        return Strings.RouteSearch.point(city: city.name, station: station.name)
+        return RoutePoint(city: city.name, station: station.name, stationCode: station.id)
     }
 }

@@ -17,27 +17,20 @@ struct StoriesView: View {
 
     // MARK: - Properties
 
-    let stories: [Story]
     let onStoryShown: (Int) -> Void
 
     @Environment(\.dismiss) private var dismiss
 
-    @State private var currentIndex: Int
-    @State private var isHolding = false
+    @StateObject private var viewModel: StoriesViewModel
     @State private var dragOffset: CGFloat = 0
-    @State private var restartToken = 0
-
-    private let timerConfiguration: TimerConfiguration
 
     // MARK: - Init
 
     init(stories: [Story], startIndex: Int, onStoryShown: @escaping (Int) -> Void) {
-        let safeIndex = stories.indices.contains(startIndex) ? startIndex : 0
-
-        self.stories = stories
         self.onStoryShown = onStoryShown
-        self.timerConfiguration = TimerConfiguration(storiesCount: stories.count)
-        _currentIndex = State(initialValue: safeIndex)
+        _viewModel = StateObject(
+            wrappedValue: StoriesViewModel(stories: stories, startIndex: startIndex)
+        )
     }
 
     // MARK: - Body
@@ -53,7 +46,7 @@ struct StoriesView: View {
         }
         .statusBarHidden()
         .onAppear {
-            onStoryShown(currentIndex)
+            onStoryShown(viewModel.currentIndex)
         }
         .simultaneousGesture(dismissGesture)
     }
@@ -63,13 +56,13 @@ struct StoriesView: View {
     private var content: some View {
         ZStack(alignment: .top) {
             StoriesTabView(
-                stories: stories,
-                currentIndex: $currentIndex,
-                isHolding: $isHolding,
+                stories: viewModel.stories,
+                currentIndex: $viewModel.currentIndex,
+                isHolding: $viewModel.isHolding,
                 onBack: showPreviousStory,
                 onForward: showNextStory
             )
-            .onChange(of: currentIndex) { _, newValue in
+            .onChange(of: viewModel.currentIndex) { _, newValue in
                 onStoryShown(newValue)
             }
 
@@ -80,11 +73,11 @@ struct StoriesView: View {
     private var controls: some View {
         VStack(spacing: Dimen.x6) {
             StoriesProgressBar(
-                storiesCount: stories.count,
-                timerConfiguration: timerConfiguration,
-                currentIndex: $currentIndex,
+                storiesCount: viewModel.stories.count,
+                timerConfiguration: viewModel.timerConfiguration,
+                currentIndex: $viewModel.currentIndex,
                 isPaused: isPaused,
-                restartToken: restartToken,
+                restartToken: viewModel.restartToken,
                 onFinish: close
             )
 
@@ -93,14 +86,14 @@ struct StoriesView: View {
         }
         .padding(.horizontal, Dimen.x3)
         .padding(.top, Dimen.x7)
-        .opacity(isHolding ? 0 : 1)
-        .animation(AppAnimation.quick, value: isHolding)
+        .opacity(viewModel.isHolding ? 0 : 1)
+        .animation(AppAnimation.quick, value: viewModel.isHolding)
     }
 
     // MARK: - Output
 
     private var isPaused: Bool {
-        isHolding || dragOffset > 0
+        viewModel.isHolding || dragOffset > 0
     }
 
     private var dismissScale: CGFloat {
@@ -140,24 +133,17 @@ struct StoriesView: View {
     }
 
     private func showNextStory() {
-        guard currentIndex < stories.count - 1 else {
+        guard viewModel.moveToNextStory() else {
             close()
             return
         }
 
         Haptics.impact(.soft)
-        currentIndex += 1
     }
 
     private func showPreviousStory() {
         Haptics.impact(.soft)
-
-        guard currentIndex > 0 else {
-            restartToken += 1
-            return
-        }
-
-        currentIndex -= 1
+        viewModel.moveToPreviousStory()
     }
 }
 

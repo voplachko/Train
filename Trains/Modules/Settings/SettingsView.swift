@@ -12,6 +12,8 @@ struct SettingsView: View {
 
     @Environment(ThemeStore.self) private var themeStore
 
+    @StateObject private var viewModel = SettingsViewModel()
+
     // MARK: - Body
 
     var body: some View {
@@ -70,8 +72,8 @@ struct SettingsView: View {
 
     private var footer: some View {
         VStack(spacing: Dimen.x4) {
-            Text(Strings.Settings.apiNotice)
-            Text(Strings.Settings.version)
+            Text(viewModel.apiNotice)
+            Text(viewModel.versionText)
         }
         .font(.regular12)
         .foregroundStyle(Color.appBlack)

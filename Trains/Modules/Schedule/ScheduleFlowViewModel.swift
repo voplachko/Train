@@ -5,29 +5,38 @@
 //  Created by Vsevolod Oplachko on 18.09.2026.
 //
 
-import SwiftUI
+import Combine
+import Foundation
 
-@Observable
-final class ScheduleFlowViewModel {
+@MainActor
+final class ScheduleFlowViewModel: ObservableObject {
     // MARK: - Properties
 
-    var path: [ScheduleRoute] = []
-    var filters = TripFilters()
+    @Published var path: [ScheduleRoute] = []
+    @Published var filters = TripFilters()
 
-    private(set) var from: String
-    private(set) var to: String
+    @Published private(set) var from: RoutePoint?
+    @Published private(set) var to: RoutePoint?
 
     // MARK: - Init
 
-    init(from: String = "", to: String = "") {
+    init(from: RoutePoint? = nil, to: RoutePoint? = nil) {
         self.from = from
         self.to = to
     }
 
     // MARK: - Output
 
+    var fromTitle: String {
+        from?.title ?? ""
+    }
+
+    var toTitle: String {
+        to?.title ?? ""
+    }
+
     var isRouteFilled: Bool {
-        !from.isEmpty && !to.isEmpty
+        from != nil && to != nil
     }
 
     // MARK: - Intents
@@ -47,7 +56,7 @@ final class ScheduleFlowViewModel {
     }
 
     func selectStation(_ station: Station, in city: City, for field: RouteField) {
-        let point = Strings.RouteSearch.point(city: city.name, station: station.name)
+        let point = RoutePoint(city: city.name, station: station.name, stationCode: station.id)
 
         switch field {
         case .from: from = point
@@ -58,7 +67,7 @@ final class ScheduleFlowViewModel {
     }
 
     func search() {
-        guard isRouteFilled else { return }
+        guard let from, let to else { return }
         path.append(.carriers(RouteQuery(from: from, to: to)))
     }
 

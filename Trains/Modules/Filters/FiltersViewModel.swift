@@ -5,15 +5,16 @@
 //  Created by Vsevolod Oplachko on 18.09.2026.
 //
 
-import SwiftUI
+import Combine
+import Foundation
 
-@Observable
-final class FiltersViewModel {
+@MainActor
+final class FiltersViewModel: ObservableObject {
     // MARK: - Properties
 
     private let appliedFilters: TripFilters
 
-    private(set) var draft: TripFilters
+    @Published private(set) var draft: TripFilters
 
     // MARK: - Init
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TripFilters: Equatable {
+struct TripFilters: Equatable, Sendable {
     // MARK: - Properties
 
     var intervals: Set<DepartureInterval>

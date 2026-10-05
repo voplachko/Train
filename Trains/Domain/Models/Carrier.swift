@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct Carrier: Identifiable, Hashable {
+struct Carrier: Identifiable, Hashable, Sendable {
     // MARK: - Properties
 
-    let id: UUID
+    let id: String
+    let code: Int?
     let name: String
     let logoURL: URL?
     let email: String
@@ -19,13 +20,15 @@ struct Carrier: Identifiable, Hashable {
     // MARK: - Init
 
     init(
-        id: UUID = UUID(),
+        id: String = UUID().uuidString,
+        code: Int? = nil,
         name: String,
         logoURL: URL? = nil,
         email: String = "",
         phone: String = ""
     ) {
         self.id = id
+        self.code = code
         self.name = name
         self.logoURL = logoURL
         self.email = email
@@ -40,5 +43,18 @@ struct Carrier: Identifiable, Hashable {
 
     var hasPhone: Bool {
         !phone.isEmpty
+    }
+
+    // MARK: - Updating
+
+    func updated(with other: Carrier) -> Carrier {
+        Carrier(
+            id: id,
+            code: code ?? other.code,
+            name: other.name.isEmpty ? name : other.name,
+            logoURL: other.logoURL ?? logoURL,
+            email: other.hasEmail ? other.email : email,
+            phone: other.hasPhone ? other.phone : phone
+        )
     }
 }

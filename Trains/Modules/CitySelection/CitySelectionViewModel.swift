@@ -5,20 +5,24 @@
 //  Created by Vsevolod Oplachko on 18.09.2026.
 //
 
-import SwiftUI
+import Combine
+import Foundation
 
-@Observable
-final class CitySelectionViewModel {
+@MainActor
+final class CitySelectionViewModel: ObservableObject {
     // MARK: - Properties
 
-    var query = ""
+    @Published var query = ""
+    @Published private(set) var state: LoadingState = .idle
+    @Published private(set) var reloadToken = 0
+    @Published private var allCities: [City] = []
 
-    private let allCities: [City]
+    private let repository: any CityRepository
 
     // MARK: - Init
 
-    init(repository: CityRepository = MockCityRepository()) {
-        allCities = repository.cities()
+    init(repository: any CityRepository = AppDependencies.cityRepository) {
+        self.repository = repository
     }
 
     // MARK: - Output
@@ -28,6 +32,29 @@ final class CitySelectionViewModel {
     }
 
     var isEmpty: Bool {
-        cities.isEmpty
+        state.isLoaded && cities.isEmpty
+    }
+
+    // MARK: - Intents
+
+    func loadCities() async {
+        guard state.needsLoading else { return }
+
+        state = .loading
+        do {
+            allCities = try await repository.cities()
+            state = .loaded
+        } catch {
+            if AppErrorMapper.isCancellation(error) {
+                state = .idle
+                return
+            }
+            state = .failed(await AppErrorMapper.map(error))
+        }
+    }
+
+    func retry() {
+        guard state.error != nil else { return }
+        reloadToken += 1
     }
 }

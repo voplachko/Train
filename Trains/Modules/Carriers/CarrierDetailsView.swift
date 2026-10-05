@@ -10,7 +10,22 @@ import SwiftUI
 struct CarrierDetailsView: View {
     // MARK: - Properties
 
-    let carrier: Carrier
+    @StateObject private var viewModel: CarrierDetailsViewModel
+
+    // MARK: - Init
+
+    init(
+        carrier: Carrier,
+        repository: any CarrierRepository = AppDependencies.carrierRepository
+    ) {
+        _viewModel = StateObject(
+            wrappedValue: CarrierDetailsViewModel(carrier: carrier, repository: repository)
+        )
+    }
+
+    private var carrier: Carrier {
+        viewModel.carrier
+    }
 
     // MARK: - Body
 
@@ -35,6 +50,9 @@ struct CarrierDetailsView: View {
         .navigationTitle(Strings.CarrierDetails.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        .task {
+            await viewModel.refresh()
+        }
     }
 
     // MARK: - Subviews
@@ -45,7 +63,7 @@ struct CarrierDetailsView: View {
                 contact(
                     title: Strings.CarrierDetails.email,
                     value: carrier.email,
-                    link: AppLinks.mail(carrier.email)
+                    link: viewModel.emailLink
                 )
             }
 
@@ -53,7 +71,7 @@ struct CarrierDetailsView: View {
                 contact(
                     title: Strings.CarrierDetails.phone,
                     value: carrier.phone,
-                    link: AppLinks.phone(carrier.phone)
+                    link: viewModel.phoneLink
                 )
             }
         }
@@ -85,7 +103,13 @@ struct CarrierDetailsView: View {
 #Preview {
     NavigationStack {
         if let carrier = MockData.carrier {
-            CarrierDetailsView(carrier: carrier)
+            CarrierDetailsView(carrier: carrier, repository: PreviewCarrierRepository())
         }
+    }
+}
+
+private struct PreviewCarrierRepository: CarrierRepository {
+    func carrier(code: Int) async throws -> Carrier? {
+        nil
     }
 }

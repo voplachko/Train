@@ -10,8 +10,7 @@ import SwiftUI
 struct AgreementView: View {
     // MARK: - Properties
 
-    @State private var isLoading = true
-    @State private var hasFailed = false
+    @StateObject private var viewModel = AgreementViewModel()
 
     // MARK: - Body
 
@@ -28,17 +27,17 @@ struct AgreementView: View {
 
     @ViewBuilder
     private var content: some View {
-        if let url = AppLinks.userAgreement {
-            WebView(url: url, isLoading: $isLoading, hasFailed: $hasFailed)
-                .opacity(hasFailed ? 0 : 1)
+        if let url = viewModel.url {
+            WebView(url: url, isLoading: $viewModel.isLoading, hasFailed: $viewModel.hasFailed)
+                .opacity(viewModel.hasFailed ? 0 : 1)
                 .overlay {
-                    if isLoading {
+                    if viewModel.isLoading {
                         ProgressView()
                             .tint(Color.appBlack)
                     }
                 }
                 .overlay {
-                    if hasFailed {
+                    if viewModel.hasFailed {
                         ErrorStateView(error: .noInternet)
                     }
                 }

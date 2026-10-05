@@ -8,7 +8,7 @@
 import CoreGraphics
 import Foundation
 
-struct TimerConfiguration {
+struct TimerConfiguration: Sendable {
     private enum Default {
         static let storiesCount = 1
         static let secondsPerStory: TimeInterval = 5

@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol CityRepository {
-    func cities() -> [City]
+protocol CityRepository: Sendable {
+    func cities() async throws -> [City]
 }

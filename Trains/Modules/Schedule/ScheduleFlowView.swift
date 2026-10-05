@@ -10,13 +10,7 @@ import SwiftUI
 struct ScheduleFlowView: View {
     // MARK: - Properties
 
-    @State private var viewModel: ScheduleFlowViewModel
-
-    // MARK: - Init
-
-    init(viewModel: ScheduleFlowViewModel = ScheduleFlowViewModel()) {
-        _viewModel = State(initialValue: viewModel)
-    }
+    @StateObject private var viewModel = ScheduleFlowViewModel()
 
     // MARK: - Body
 

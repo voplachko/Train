@@ -15,8 +15,6 @@ struct RootTabView: View {
 
     // MARK: - Properties
 
-    @Environment(ErrorState.self) private var errorState
-
     @State private var selectedTab: Tab = .schedule
 
     // MARK: - Body
@@ -24,14 +22,12 @@ struct RootTabView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             ScheduleFlowView()
-                .errorOverlay(errorState.current, onTap: clearErrorInDebug)
                 .tag(Tab.schedule)
                 .tabItem {
                     Image(selectedTab == .schedule ? .icTabMainActive : .icTabMainInactive)
                 }
 
             SettingsView()
-                .errorOverlay(errorState.current, onTap: clearErrorInDebug)
                 .tag(Tab.settings)
                 .tabItem {
                     Image(selectedTab == .settings ? .icTabSettingsActive : .icTabSettingsInactive)
@@ -39,21 +35,12 @@ struct RootTabView: View {
         }
         .tint(Color.appBlack)
     }
-
-    // MARK: - Actions
-
-    private func clearErrorInDebug() {
-        #if DEBUG
-        errorState.clear()
-        #endif
-    }
 }
 
 // MARK: - Preview
 
 #Preview {
     RootTabView()
-        .environment(ErrorState())
         .environment(ThemeStore())
         .environment(StoriesStore())
 }

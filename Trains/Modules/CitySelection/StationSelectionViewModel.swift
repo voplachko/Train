@@ -5,13 +5,14 @@
 //  Created by Vsevolod Oplachko on 18.09.2026.
 //
 
-import SwiftUI
+import Combine
+import Foundation
 
-@Observable
-final class StationSelectionViewModel {
+@MainActor
+final class StationSelectionViewModel: ObservableObject {
     // MARK: - Properties
 
-    var query = ""
+    @Published var query = ""
 
     private let allStations: [Station]
 
